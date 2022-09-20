@@ -31,7 +31,9 @@ type Dual<'a
     static member inline Cos(D (x, x')) = D (cos x, x' * -(sin x))
 
     static member inline Pow(d, n) = pown d n
+    static member inline Exp(D (x, x')) = D (exp x, x' * exp x)
     static member inline Sqrt(D (x, x')) =
         let two = Seq.reduce (+) [ GenericOne; GenericOne ]   // ugh
         D (sqrt x, x' / (two * sqrt x))
-    static member inline Exp(D (x, x')) = D (exp x, x' * exp x)
+
+    static member inline Log(D (x, x')) = D (log x, x' * (GenericOne / x))

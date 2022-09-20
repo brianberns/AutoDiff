@@ -128,3 +128,10 @@ type TestClass () =
         let dual = f (lift x)
         Assert.AreEqual<_>(f x, dual.Value)
         Assert.AreEqual<_>(f' x, dual.Deriv)
+
+    [<TestMethod>]
+    member _.Log() =
+        let x = 4.
+        let dual = log (lift x)
+        Assert.AreEqual<_>(log x, dual.Value)
+        Assert.AreEqual<_>(1./x, dual.Deriv)
