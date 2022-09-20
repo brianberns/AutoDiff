@@ -40,7 +40,7 @@ type TestClass () =
 
     /// Differentiate high-dimensional function.
     [<TestMethod>]
-    member _.HighDimension() =
+    member _.R3toR1() =
 
         let inline f x y z =   // f: R^3 -> R
             Generic.fromInt 2 * x**2 + Generic.fromInt 3 * y + sin z
@@ -48,3 +48,16 @@ type TestClass () =
         let dual = f (D (3., 1.)) (D (4., 1.)) (D (5., 1.))   // call f with dual numbers, set derivative to 1
         Assert.AreEqual<_>(29.04107572533686, dual.Value)
         Assert.AreEqual<_>(15.283662185463227, dual.Deriv)
+
+    /// Differentiate high-dimensional function.
+    [<TestMethod>]
+    member _.R3toR2() =
+
+        let inline f x y z =   // f: R^3 -> R^2
+            Generic.fromInt 2 * x**2, Generic.fromInt 3 * y + sin z
+
+        let dual1, dual2 = f (D (3., 1.)) (D (4., 1.)) (D (5., 1.))
+        Assert.AreEqual<_>(18.0, dual1.Value)
+        Assert.AreEqual<_>(12.0, dual1.Deriv)
+        Assert.AreEqual<_>(11.041075725336862, dual2.Value)
+        Assert.AreEqual<_>(3.283662185463226, dual2.Deriv)
