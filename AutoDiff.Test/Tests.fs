@@ -1,11 +1,25 @@
 namespace AutoDiff.Test
 
+// https://gist.github.com/ttesmer/948df432cf46ec6db8c1e83ab59b1b21
+// http://conal.net/papers/beautiful-differentiation/beautiful-differentiation-long.pdf
+// https://en.wikipedia.org/wiki/Automatic_differentiation
+
 open Microsoft.VisualStudio.TestTools.UnitTesting
 open AutoDiff
+
+module Generic =
+
+    /// Converts an integer to the corresponding generic number.
+    let inline fromInt n =
+        assert(n > 0)
+        LanguagePrimitives.GenericOne
+            |> Seq.replicate n
+            |> Seq.reduce (+)
 
 [<TestClass>]
 type TestClass () =
 
+    /// Prepares to find the derivative of a function for the given input.
     let lift x = D (x, 1.)
 
     [<TestMethod>]
