@@ -65,3 +65,6 @@ type Dual<'a
 
     static member inline Sqrt(D (x, x')) =
         D (sqrt x, x' / ((Generic.fromInt 2) * sqrt x))
+
+    static member inline Exp(D (x, x')) =
+        D (exp x, x' * exp x)

@@ -99,3 +99,18 @@ type TestClass () =
         let dual = f (lift x)
         Assert.AreEqual<_>(f x, dual.Value)
         Assert.AreEqual<_>(f' x, dual.Deriv)
+
+    [<TestMethod>]
+    member _.Exp() =
+
+        let n = 2
+        let inline f x =
+            exp (Generic.fromInt n * x)
+
+        let inline f' x =
+            (Generic.fromInt n) * f x
+
+        let x = 4.
+        let dual = f (lift x)
+        Assert.AreEqual<_>(f x, dual.Value)
+        Assert.AreEqual<_>(f' x, dual.Deriv)
