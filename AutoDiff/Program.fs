@@ -40,6 +40,9 @@ type D<'a
     static member inline Cos(D (x, x')) =
         D (cos x, x' * -(sin x))
 
+    static member inline Pow(d, n) =
+        pown d n
+
     static member inline Sqrt(D (x, x')) =
         D (sqrt x, x' / ((Generic.fromInt 2) * sqrt x))
 
@@ -65,7 +68,7 @@ let inline f x =
     let g2 = Generic.fromInt 2
     let g3 = Generic.fromInt 3
     let g4 = Generic.fromInt 4
-    g2 * pown x 3 + g3 * pown x 2 + g4 * x + g2
+    g2 * x**3 + g3 * x**2 + g4 * x + g2
 
 let valf = f (D (10.0, 1.0))
 printfn "%A" valf
