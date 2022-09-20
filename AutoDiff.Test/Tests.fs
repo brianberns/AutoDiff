@@ -31,7 +31,7 @@ type TestClass () =
             D (f1 x, (3.0 * cos x / (2.0 * sqrt (3.0 * sin x))))
 
         let dual2 = f2 2.0
-        Assert.AreEqual(dual2, dual1)
+        Assert.AreEqual<_>(dual2, dual1)
 
     [<TestMethod>]
     member _.Polynomial() =
