@@ -37,3 +37,19 @@ type TestClass () =
 
         let valf = f (D (10.0, 1.0))
         Assert.AreEqual<_>(664.0, valf.Deriv)
+
+    [<TestMethod>]
+    member _.Test3() =
+
+        let inline f x y z =   // f: R^3 -> R
+            Generic.fromInt 2 * x**2 + Generic.fromInt 3 * y + sin z
+        let dual1 = f (D (3., 1.)) (D (4., 1.)) (D (5., 1.))   // call f with dual numbers, set derivative to 1
+        Assert.AreEqual<_>(29.04107572533686, dual1.Value)
+        Assert.AreEqual<_>(15.283662185463227, dual1.Deriv)
+
+        (*
+        D 29.041077 15.283662
+        > f x y z = (2 * x^2, 3 * y + sin z)       -- f: R^3 -> R^2
+        > f (D 3 1) (D 4 1) (D 5 1) :: (Dual Float', Dual Float')
+        (D 18.0 12.0,D 11.041076 3.2836623)
+        *)
