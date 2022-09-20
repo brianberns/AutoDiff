@@ -12,7 +12,7 @@ exists solely as a demonstration and learning tool. **Do not use this code in pr
 
 ## Generic numbers
 
-Let's start with a function that implements a simple numerical compuation in F#:
+Let's start with a function that implements a simple numerical computation in F#:
 
 ```fsharp
 > let f x = sqrt (3.0 * sin x);;
@@ -46,7 +46,6 @@ a corresponding generic version of the number 3. There's no built-in way to do t
 ourselves:
 
 ```fsharp
-
 module Generic =
 
     /// Converts an integer to the corresponding generic number.
