@@ -1,4 +1,6 @@
-﻿open LanguagePrimitives
+﻿namespace AutoDiff
+
+open LanguagePrimitives
 
 module Generic =
 
@@ -8,19 +10,31 @@ module Generic =
             |> Seq.replicate n
             |> Seq.reduce (+)
 
-type D<'a
+/// A dual number, consisting of a regular value and a derivative value in tandem.
+/// https://gist.github.com/ttesmer/948df432cf46ec6db8c1e83ab59b1b21
+/// http://conal.net/papers/beautiful-differentiation/beautiful-differentiation-long.pdf
+/// https://en.wikipedia.org/wiki/Automatic_differentiation
+type Dual<'a
     when 'a : (static member Zero : 'a)
     and 'a : (static member One : 'a)> =
-        D of ('a * 'a) with
+        D of value : 'a * derivative : 'a with
+
+    member inline d.Value =
+        // let D(reg, _) = d in reg
+        match d with D(value, _) -> value
+
+    member inline d.Deriv =
+        // let D(_, deriv) = d in deriv
+        match d with D(_, deriv) -> deriv
 
     static member inline Const(x : 'a) =
         D (x, GenericZero)
 
     static member inline Zero =
-        D.Const(GenericZero<'a>)
+        Dual.Const(GenericZero<'a>)
 
     static member inline One =
-        D.Const(GenericOne<'a>)
+        Dual.Const(GenericOne<'a>)
 
     static member inline (+)(D (x, x'), D (y, y')) =
         D (x + y, x' + y')
@@ -45,30 +59,3 @@ type D<'a
 
     static member inline Sqrt(D (x, x')) =
         D (sqrt x, x' / ((Generic.fromInt 2) * sqrt x))
-
-let inline constD x = D (x, GenericZero)
-let inline idD x = D (x, GenericOne)
-
-let inline f1 z =
-    sqrt ((Generic.fromInt 3) * sin z)
-
-let val1 = f1 (D (2.0, 1.0))
-printfn "%A" val1
-
-let val1f = f1 (D (2.0f, 1.0f))
-printfn "%A" val1f
-
-let inline f2 x =
-    D (f1 x, (3.0 * cos x / (2.0 * sqrt (3.0 * sin x))))
-
-let val2 = f2 2.0
-printfn "%A" val2
-
-let inline f x =
-    let g2 = Generic.fromInt 2
-    let g3 = Generic.fromInt 3
-    let g4 = Generic.fromInt 4
-    g2 * x**3 + g3 * x**2 + g4 * x + g2
-
-let valf = f (D (10.0, 1.0))
-printfn "%A" valf
