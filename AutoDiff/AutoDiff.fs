@@ -20,12 +20,10 @@ type Dual<'a
         D of value : 'a * derivative : 'a with
 
     member inline d.Value =
-        // let D(reg, _) = d in reg
-        match d with D(value, _) -> value
+        let (D(reg, _)) = d in reg
 
     member inline d.Deriv =
-        // let D(_, deriv) = d in deriv
-        match d with D(_, deriv) -> deriv
+        let (D(_, deriv)) = d in deriv
 
     static member inline Const(x : 'a) =
         D (x, GenericZero)
