@@ -6,6 +6,8 @@ open AutoDiff
 [<TestClass>]
 type TestClass () =
 
+    let lift x = D (x, 1.)
+
     [<TestMethod>]
     member _.Basic() =
 
@@ -19,7 +21,7 @@ type TestClass () =
         let val1 = f1 2.0
         Assert.AreEqual<_>(expectedValue, val1)
 
-        let dual1 = f1 (D (2.0, 1.0))
+        let dual1 = f1 (lift 2.0)
         Assert.AreEqual<_>(expectedValue, dual1.Value)
         Assert.AreEqual<_>(expectedDeriv, dual1.Deriv)
 
@@ -42,7 +44,7 @@ type TestClass () =
             let g4 = Generic.fromInt 4
             g2 * x**3 + g3 * x**2 + g4 * x + g2
 
-        let valf = f (D (10.0, 1.0))
+        let valf = f (lift 10.0)
         Assert.AreEqual<_>(664.0, valf.Deriv)
 
     /// Differentiate high-dimensional function.
@@ -52,7 +54,7 @@ type TestClass () =
         let inline f x y z =   // f: R^3 -> R
             Generic.fromInt 2 * x**2 + Generic.fromInt 3 * y + sin z
 
-        let dual = f (D (3., 1.)) (D (4., 1.)) (D (5., 1.))   // call f with dual numbers, set derivative to 1
+        let dual = f (lift 3.) (lift 4.) (lift 5.)
         Assert.AreEqual<_>(29.04107572533686, dual.Value)
         Assert.AreEqual<_>(15.283662185463227, dual.Deriv)
 
@@ -63,7 +65,7 @@ type TestClass () =
         let inline f x y z =   // f: R^3 -> R^2
             Generic.fromInt 2 * x**2, Generic.fromInt 3 * y + sin z
 
-        let dual1, dual2 = f (D (3., 1.)) (D (4., 1.)) (D (5., 1.))
+        let dual1, dual2 = f (lift 3.) (lift 4.) (lift 5.)
         Assert.AreEqual<_>(18.0, dual1.Value)
         Assert.AreEqual<_>(12.0, dual1.Deriv)
         Assert.AreEqual<_>(11.041075725336862, dual2.Value)
@@ -94,6 +96,6 @@ type TestClass () =
             -23.0 / ((3. * x - 4.) ** 2.)
 
         let x = 10.
-        let dual = f (D (x, 1.))
+        let dual = f (lift x)
         Assert.AreEqual<_>(f x, dual.Value)
         Assert.AreEqual<_>(f' x, dual.Deriv)
