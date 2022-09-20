@@ -12,6 +12,9 @@ type TestClass () =
         let inline f1 z =
             sqrt (Generic.fromInt 3 * sin z)
 
+        let val1 = f1 2.0
+        Assert.AreEqual<_>(1.6516332160855343, val1)
+
         let dual1 = f1 (D (2.0, 1.0))
         Assert.AreEqual<_>(1.6516332160855343, dual1.Value)
         Assert.AreEqual<_>(-0.3779412091869595, dual1.Deriv)
