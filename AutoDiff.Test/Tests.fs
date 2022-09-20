@@ -68,3 +68,32 @@ type TestClass () =
         Assert.AreEqual<_>(12.0, dual1.Deriv)
         Assert.AreEqual<_>(11.041075725336862, dual2.Value)
         Assert.AreEqual<_>(3.283662185463226, dual2.Deriv)
+
+    [<TestMethod>]
+    member _.Reciprocal() =
+
+        let inline f x =
+            Generic.fromInt 1 / x
+
+        let dual = f (D (10., 1.))
+        Assert.AreEqual<_>(0.1, dual.Value)
+        Assert.AreEqual<_>(-1./100., dual.Deriv)
+
+    [<TestMethod>]
+    member _.Division() =
+
+        // https://calcworkshop.com/derivatives/quotient-rule/
+        let inline f x =
+            let g1 = Generic.fromInt 1
+            let g3 = Generic.fromInt 3
+            let g4 = Generic.fromInt 4
+            let g5 = Generic.fromInt 5
+            (g5 * x + g1) / (g3 * x - g4)
+
+        let inline f' x =
+            -23.0 / ((3. * x - 4.) ** 2.)
+
+        let x = 10.
+        let dual = f (D (x, 1.))
+        Assert.AreEqual<_>(f x, dual.Value)
+        Assert.AreEqual<_>(f' x, dual.Deriv)

@@ -4,6 +4,7 @@ open LanguagePrimitives
 
 module Generic =
 
+    /// Converts an integer to the corresponding generic number.
     let inline fromInt n =
         assert(n > 0)
         GenericOne
@@ -17,6 +18,8 @@ module Generic =
 type Dual<'a
     when 'a : (static member Zero : 'a)
     and 'a : (static member One : 'a)> =
+
+        /// A dual number.
         D of value : 'a * derivative : 'a with
 
     member inline d.Value =
@@ -37,11 +40,16 @@ type Dual<'a
     static member inline (+)(D (x, x'), D (y, y')) =
         D (x + y, x' + y')
 
+    static member inline (-)(x, y) =
+        x + (-y)
+
     static member inline (*)(D (x, x'), D (y, y')) =
         D (x * y, y' * x + x' * y)
 
     static member inline (/)(D (x, x'), D (y, y')) =
-        failwith "moo"
+        let deriv =
+            (GenericOne / (y * y)) * (y * x' + (-x) * y')
+        D (x / y, deriv)
 
     static member inline (~-)(D (x, x')) =
         D (-x, -x')
