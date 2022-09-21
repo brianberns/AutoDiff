@@ -8,7 +8,7 @@ which is in turn inspired by [Beautiful Differentiation](http://conal.net/papers
 (SRTP) and [operator overloading](https://learn.microsoft.com/en-us/dotnet/fsharp/language-reference/operator-overloading)
 in F# make it possible to differentiate a function that is written almost like a plain old F# function. However, due to the
 limitations of F#, this implementation is much simpler and less powerful than the original Haskell version. This F# version
-exists solely as a demonstration and learning tool. **Do not use this code in production.**
+exists solely as a demonstration and learning tool.
 
 ## Generic numbers
 
@@ -73,9 +73,12 @@ val it: float = 1.651633216
 val it: float32 = 1.651633143f
 ```
 
+Note, for example, that the particular implementation of the `*` operator that is invoked will vary depending on the
+numeric type.
+
 # Dual numbers
 
-Our generic function will now work for any type, as long as that type overloads the necessary underlying members,
+In fact, our generic function will now work for *any* type that type implements the necessary underlying members,
 such as `+`, `*`, `One`, `Sin`, and `Sqrt`. We can even write our own such type, which implements [dual numbers](https://en.wikipedia.org/wiki/Dual_number).
 A dual number is a tuple where the first item is a regular value and the second item is a derivative:
 
