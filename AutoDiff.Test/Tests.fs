@@ -135,3 +135,11 @@ type TestClass () =
         let dual = log (lift x)
         Assert.AreEqual<_>(log x, dual.Value)
         Assert.AreEqual<_>(1./x, dual.Deriv)
+
+    [<TestMethod>]
+    member _.Pow() =
+        let x = 4.
+        let n = 3
+        let dual = (lift x) ** n
+        Assert.AreEqual<_>(pown x n, dual.Value)
+        Assert.AreEqual<_>(float n * x * x, dual.Deriv)
