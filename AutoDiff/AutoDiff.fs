@@ -7,8 +7,8 @@ type Dual<'a
     when 'a : (static member Zero : 'a)
     and 'a : (static member One : 'a)> =
 
-        /// A dual number.
-        D of value : 'a * derivative : 'a with
+    /// A dual number.
+    D of value : 'a * derivative : 'a with
 
     member inline d.Value = let (D(reg, _)) = d in reg
     member inline d.Deriv = let (D(_, deriv)) = d in deriv
