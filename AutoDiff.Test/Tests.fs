@@ -22,6 +22,10 @@ type TestClass () =
     /// Prepares to find the derivative of a function for the given input.
     let lift x = D (x, 1.)
 
+    /// Dumb assertion workaround.
+    let areEqual(expected : 't, actual : 't) =
+        Assert.AreEqual<'t>(expected, actual)
+
     [<TestMethod>]
     member _.Basic() =
 
@@ -33,11 +37,11 @@ type TestClass () =
         let expectedDeriv = -0.3779412091869595
 
         let val1 = f1 2.0
-        Assert.AreEqual<_>(expectedValue, val1)
+        areEqual(expectedValue, val1)
 
         let dual1 = f1 (lift 2.0)
-        Assert.AreEqual<_>(expectedValue, dual1.Value)
-        Assert.AreEqual<_>(expectedDeriv, dual1.Deriv)
+        areEqual(expectedValue, dual1.Value)
+        areEqual(expectedDeriv, dual1.Deriv)
 
         let dual1f = f1 (D (2.0f, 1.0f))
         Assert.AreEqual(float32 expectedValue, dual1f.Value, 0.000001f)
@@ -47,7 +51,7 @@ type TestClass () =
             D (f1 x, (3.0 * cos x / (2.0 * sqrt (3.0 * sin x))))
 
         let dual2 = f2 2.0
-        Assert.AreEqual<_>(dual2, dual1)
+        areEqual(dual2, dual1)
 
     [<TestMethod>]
     member _.Polynomial() =
@@ -59,7 +63,7 @@ type TestClass () =
             g2 * x**3 + g3 * x**2 + g4 * x + g2
 
         let valf = f (lift 10.0)
-        Assert.AreEqual<_>(664.0, valf.Deriv)
+        areEqual(664.0, valf.Deriv)
 
     /// Differentiate high-dimensional function.
     [<TestMethod>]
@@ -69,8 +73,8 @@ type TestClass () =
             Generic.fromInt 2 * x**2 + Generic.fromInt 3 * y + sin z
 
         let dual = f (lift 3.) (lift 4.) (lift 5.)
-        Assert.AreEqual<_>(29.04107572533686, dual.Value)
-        Assert.AreEqual<_>(15.283662185463227, dual.Deriv)
+        areEqual(29.04107572533686, dual.Value)
+        areEqual(15.283662185463227, dual.Deriv)
 
     /// Differentiate high-dimensional function.
     [<TestMethod>]
@@ -80,10 +84,10 @@ type TestClass () =
             Generic.fromInt 2 * x**2, Generic.fromInt 3 * y + sin z
 
         let dual1, dual2 = f (lift 3.) (lift 4.) (lift 5.)
-        Assert.AreEqual<_>(18.0, dual1.Value)
-        Assert.AreEqual<_>(12.0, dual1.Deriv)
-        Assert.AreEqual<_>(11.041075725336862, dual2.Value)
-        Assert.AreEqual<_>(3.283662185463226, dual2.Deriv)
+        areEqual(18.0, dual1.Value)
+        areEqual(12.0, dual1.Deriv)
+        areEqual(11.041075725336862, dual2.Value)
+        areEqual(3.283662185463226, dual2.Deriv)
 
     [<TestMethod>]
     member _.Reciprocal() =
@@ -92,8 +96,8 @@ type TestClass () =
             Generic.fromInt 1 / x
 
         let dual = f (D (10., 1.))
-        Assert.AreEqual<_>(0.1, dual.Value)
-        Assert.AreEqual<_>(-1./100., dual.Deriv)
+        areEqual(0.1, dual.Value)
+        areEqual(-1./100., dual.Deriv)
 
     [<TestMethod>]
     member _.Division() =
@@ -111,8 +115,8 @@ type TestClass () =
 
         let x = 10.
         let dual = f (lift x)
-        Assert.AreEqual<_>(f x, dual.Value)
-        Assert.AreEqual<_>(f' x, dual.Deriv)
+        areEqual(f x, dual.Value)
+        areEqual(f' x, dual.Deriv)
 
     [<TestMethod>]
     member _.Exp() =
@@ -126,20 +130,20 @@ type TestClass () =
 
         let x = 4.
         let dual = f (lift x)
-        Assert.AreEqual<_>(f x, dual.Value)
-        Assert.AreEqual<_>(f' x, dual.Deriv)
+        areEqual(f x, dual.Value)
+        areEqual(f' x, dual.Deriv)
 
     [<TestMethod>]
     member _.Log() =
         let x = 4.
         let dual = log (lift x)
-        Assert.AreEqual<_>(log x, dual.Value)
-        Assert.AreEqual<_>(1./x, dual.Deriv)
+        areEqual(log x, dual.Value)
+        areEqual(1./x, dual.Deriv)
 
     [<TestMethod>]
     member _.Pow() =
         let x = 4.
         let n = 3
         let dual = (lift x) ** n
-        Assert.AreEqual<_>(pown x n, dual.Value)
-        Assert.AreEqual<_>(float n * x * x, dual.Deriv)
+        areEqual(pown x n, dual.Value)
+        areEqual(float n * x * x, dual.Deriv)
